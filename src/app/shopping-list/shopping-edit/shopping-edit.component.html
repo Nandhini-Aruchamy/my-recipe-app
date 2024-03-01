@@ -1,0 +1,32 @@
+<div class="row">
+    <div class="col-cs-12">
+        <form [formGroup]="shoppingListForm" (ngSubmit)="submitItem()">
+            <div class="row">
+                <div class="col-sm-5 form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" class="form-control" formControlName="itemName">
+                </div>
+                <div class="col-sm-2 form-group">
+                    <label for="amount">Amount</label>
+                    <input type="text" id="amount" class="form-control" formControlName="itemAmount">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <button class="btn btn-success" [disabled]="!shoppingListForm.valid" type="submit">
+                        @if(isEditMode){
+                        <span>Update</span>
+                        }
+                        @else{
+                        <span>Add</span>
+                        }
+                    </button>
+                    @if(isEditMode){
+                    <button class="btn btn-danger" type="button" (click)="deleteItem()">Delete Item</button>
+                    }
+                    <button class="btn btn-primary" type="button" (click)="clearItem()">Clear</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
