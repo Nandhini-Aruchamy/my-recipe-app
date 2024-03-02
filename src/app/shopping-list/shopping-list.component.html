@@ -4,7 +4,7 @@
         <hr>
         <ul class="list-group">
             @for(ingredient of ingredients;track ingredient.name;let i =$index){
-            <a style="cursor: pointer;" class="list-group-item" style="cursor:pointer" (click)="editIngredients(i)">
+            <a style="cursor: pointer;" tabindex="0" class="list-group-item" style="cursor:pointer" (click)="editIngredients(i)">
                 {{ingredient.name}} {{ingredient.amount}}
             </a>
             }

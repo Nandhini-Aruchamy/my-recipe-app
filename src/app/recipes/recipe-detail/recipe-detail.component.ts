@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Recipe } from '../recipe.model';
 import { DropdownDirective } from '../../shared/directives/dropdown.directive';
 import { ShoppingListService } from '../../shopping-list/shopping-list.service';

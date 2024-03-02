@@ -32,7 +32,7 @@ export class RecipeEditComponent implements OnInit {
   }
 
   addIngredient() {
-    let formArray = <FormArray>this.editRecipeForm.get("ingredients");
+    const formArray = <FormArray>this.editRecipeForm.get("ingredients");
     formArray.push(new FormGroup({
       "name": new FormControl(null, Validators.required),
       "amount": new FormControl(null, [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)])
@@ -82,7 +82,7 @@ export class RecipeEditComponent implements OnInit {
 
   loadIngredients() {
     if (this.recipe?.ingredients) {
-      let formArray = <FormArray>this.editRecipeForm.get("ingredients");
+      const formArray = <FormArray>this.editRecipeForm.get("ingredients");
       for (let index = 0; index < this.recipe.ingredients.length; index++) {
         const ingredient = this.recipe.ingredients[index];
         formArray.push(new FormGroup({

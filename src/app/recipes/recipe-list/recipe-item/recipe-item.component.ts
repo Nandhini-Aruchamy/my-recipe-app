@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Recipe } from '../../recipe.model';
 import { RecipeListComponent } from '../recipe-list.component';
 import { RouterModule } from '@angular/router';
@@ -6,17 +6,11 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-recipe-item',
   standalone: true,
-  imports: [RecipeListComponent,RouterModule],
+  imports: [RecipeListComponent, RouterModule],
   templateUrl: './recipe-item.component.html',
   styleUrl: './recipe-item.component.css'
 })
-export class RecipeItemComponent implements OnInit{
+export class RecipeItemComponent {
   @Input() recipe!: Recipe;
-  @Input() index! : number;
-
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
+  @Input() index!: number;
 }
