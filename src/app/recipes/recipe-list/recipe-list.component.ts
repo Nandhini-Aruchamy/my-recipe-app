@@ -11,12 +11,12 @@ import { Subscription } from 'rxjs';
   imports: [RecipeItemComponent, RouterModule],
   providers: [],
   templateUrl: './recipe-list.component.html',
-  styleUrl: './recipe-list.component.css'
+  styleUrl: './recipe-list.component.css',
 })
-export class RecipeListComponent implements OnInit,OnDestroy {
+export class RecipeListComponent implements OnInit, OnDestroy {
   recipeService: RecipeService;
   recipeUpdatedSubscription!: Subscription;
-  recipeDeletedSubscription! : Subscription;
+  recipeDeletedSubscription!: Subscription;
 
   recipes?: Recipe[];
 
@@ -25,14 +25,19 @@ export class RecipeListComponent implements OnInit,OnDestroy {
   }
 
   ngOnInit() {
-    this.recipes = this.recipeService.getRecipes();
-
-    this.recipeService.recipeUpdated.subscribe((recipes) => this.recipes = recipes);
-    this.recipeService.recipeDeleted.subscribe((recipes) => this.recipes = recipes);
+    this.recipeService
+      .getRecipes()
+      .subscribe((recipes) => (this.recipes = recipes));
+    this.recipeUpdatedSubscription = this.recipeService.recipeUpdated.subscribe(
+      (recipes) => (this.recipes = recipes)
+    );
+    this.recipeDeletedSubscription = this.recipeService.recipeDeleted.subscribe(
+      (recipes) => (this.recipes = recipes)
+    );
   }
 
   ngOnDestroy(): void {
     this.recipeUpdatedSubscription.unsubscribe();
     this.recipeDeletedSubscription.unsubscribe();
   }
-} 
+}
