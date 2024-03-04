@@ -26,10 +26,10 @@ export class RecipeService {
     this.httpService = inject(HttpRequestService);
   }
 
-  getRecipes() {
+  getRecipes(): Observable<Recipe[]> {
     return this.httpService
       .httpRequest('get')
-      .pipe(map((recipes) => (this.recipes = recipes)));
+      .pipe(map((recipes) => (this.recipes = recipes as Recipe[])));
   }
 
   getRecipe(id: number) {
