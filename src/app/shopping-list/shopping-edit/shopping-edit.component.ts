@@ -1,7 +1,12 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
-import { Ingredient } from '../../shared/ingredient.model';
+import { Ingredient } from '../../shared/models/ingredient.model';
 import { ShoppingListService } from '../shopping-list.service';
-import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -9,7 +14,7 @@ import { Subscription } from 'rxjs';
   standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './shopping-edit.component.html',
-  styleUrl: './shopping-edit.component.css'
+  styleUrl: './shopping-edit.component.css',
 })
 export class ShoppingEditComponent implements OnInit, OnDestroy {
   shoppingListService: ShoppingListService;
@@ -24,30 +29,46 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.shoppingListForm = new FormGroup({
-      'itemName': new FormControl(null, Validators.required),
-      'itemAmount': new FormControl(null, [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)])
+      itemName: new FormControl(null, Validators.required),
+      itemAmount: new FormControl(null, [
+        Validators.required,
+        Validators.pattern(/^[1-9]+[0-9]*$/),
+      ]),
     });
 
-    this.ingredientsEditedSubscription = this.shoppingListService.ingredientsToBeEdited.subscribe(([ingredient, i]) => {
-      this.shoppingListForm.setValue({
-        'itemName': ingredient.name,
-        'itemAmount': ingredient.amount
-      });
-      this.editIndex = i;
-      this.isEditMode = true;
-    });
+    this.ingredientsEditedSubscription =
+      this.shoppingListService.ingredientsToBeEdited.subscribe(
+        ([ingredient, i]) => {
+          this.shoppingListForm.setValue({
+            itemName: ingredient.name,
+            itemAmount: ingredient.amount,
+          });
+          this.editIndex = i;
+          this.isEditMode = true;
+        }
+      );
   }
 
   submitItem() {
     if (this.isEditMode) {
       if (this.editIndex !== null) {
-        this.shoppingListService.updateIngredients(new Ingredient(this.shoppingListForm.get('itemName')?.value, this.shoppingListForm.get('itemAmount')?.value), this.editIndex);
+        this.shoppingListService.updateIngredients(
+          new Ingredient(
+            this.shoppingListForm.get('itemName')?.value,
+            this.shoppingListForm.get('itemAmount')?.value
+          ),
+          this.editIndex
+        );
 
         this.clearItem();
       }
-    }
-    else {
-      this.shoppingListService.addIngredients(new Ingredient(this.shoppingListForm.get('itemName')?.value, this.shoppingListForm.get('itemAmount')?.value));
+    } else {
+      this.shoppingListService.addIngredients(
+        new Ingredient(
+          this.shoppingListForm.get('itemName')?.value,
+          this.shoppingListForm.get('itemAmount')?.value
+        )
+      );
     }
   }
 

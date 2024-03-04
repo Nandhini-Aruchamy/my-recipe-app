@@ -4,19 +4,21 @@ import { DropdownDirective } from '../../shared/directives/dropdown.directive';
 import { ShoppingListService } from '../../shopping-list/shopping-list.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { RecipeService } from '../recipe.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-recipe-detail',
   standalone: true,
   imports: [DropdownDirective, RouterModule],
   templateUrl: './recipe-detail.component.html',
-  styleUrl: './recipe-detail.component.css'
+  styleUrl: './recipe-detail.component.css',
 })
 export class RecipeDetailComponent implements OnInit {
   recipe!: Recipe;
   recipeService: RecipeService;
   shoppingListService: ShoppingListService;
   index!: number;
+  recipeFetchedSubscription!: Subscription;
 
   constructor(private route: ActivatedRoute, private router: Router) {
     this.shoppingListService = inject(ShoppingListService);
@@ -42,5 +44,4 @@ export class RecipeDetailComponent implements OnInit {
   // onEdit() {
   //   this.router.navigate(['../1/Edit'] ,{ relativeTo : this.route});
   // }
-
 }
