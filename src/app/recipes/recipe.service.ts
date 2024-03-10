@@ -3,6 +3,7 @@ import { Recipe } from './recipe.model';
 import { Ingredient } from '../shared/models/ingredient.model';
 import { Observable, Subject, map } from 'rxjs';
 import { HttpRequestService } from '../shared/services/http-request.service';
+import { RequestType } from '../shared/enums/request-type';
 
 @Injectable({
   providedIn: 'root',
@@ -20,15 +21,11 @@ export class RecipeService {
   recipeFetched = new Subject<Recipe[]>();
   recipeUpdated = new Subject<Recipe[]>();
   recipeDeleted = new Subject<Recipe[]>();
-  httpService: HttpRequestService;
-
-  constructor() {
-    this.httpService = inject(HttpRequestService);
-  }
+  httpService = inject(HttpRequestService);
 
   getRecipes(): Observable<Recipe[]> {
     return this.httpService
-      .httpRequest('get')
+      .httpRequest(RequestType.GET)
       .pipe(map((recipes) => (this.recipes = recipes as Recipe[])));
   }
 
@@ -37,10 +34,10 @@ export class RecipeService {
   }
 
   addRecipe(recipe: Recipe) {
-    this.httpService
-      .httpRequest('post', recipe)
-      .subscribe((data) => console.log(data));
-    this.recipeUpdated.next(this.recipes);
+    this.recipes.push(recipe);
+    // this.httpService.httpRequest(RequestType.UPDATE, recipe);
+    //.subscribe((data) => console.log(data));
+    //this.recipeUpdated.next(this.recipes);
   }
 
   updateRecipe(index: number, recipe: Recipe) {
@@ -54,6 +51,6 @@ export class RecipeService {
 
   deleteRecipe(index: number) {
     this.recipes.splice(index, 1);
-    this.recipeDeleted.next(this.recipes.slice());
+    //this.recipeDeleted.next(this.recipes.slice());
   }
 }

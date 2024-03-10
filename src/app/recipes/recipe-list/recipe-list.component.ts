@@ -4,6 +4,8 @@ import { Recipe } from '../recipe.model';
 import { RecipeService } from '../recipe.service';
 import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { HttpRequestService } from '../../shared/services/http-request.service';
+import { getDatabase, ref, onValue } from '@angular/fire/database';
 
 @Component({
   selector: 'app-recipe-list',
@@ -19,21 +21,24 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   recipeDeletedSubscription!: Subscription;
 
   recipes?: Recipe[];
+  httpService!: HttpRequestService;
+  db = getDatabase();
 
   constructor() {
     this.recipeService = inject(RecipeService);
   }
 
   ngOnInit() {
-    this.recipeService
-      .getRecipes()
-      .subscribe((recipes) => (this.recipes = recipes));
-    this.recipeUpdatedSubscription = this.recipeService.recipeUpdated.subscribe(
-      (recipes) => (this.recipes = recipes)
-    );
-    this.recipeDeletedSubscription = this.recipeService.recipeDeleted.subscribe(
-      (recipes) => (this.recipes = recipes)
-    );
+    this.recipeService.getRecipes().subscribe((recipes) => {
+      console.log('fxg');
+      return (this.recipes = recipes);
+    });
+    // this.recipeUpdatedSubscription = this.recipeService.recipeUpdated.subscribe(
+    //   (recipes) => (this.recipes = recipes)
+    // );
+    // this.recipeDeletedSubscription = this.recipeService.recipeDeleted.subscribe(
+    //   (recipes) => (this.recipes = recipes)
+    // );
   }
 
   ngOnDestroy(): void {
