@@ -2,7 +2,11 @@ import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withFetch,
+  withInterceptors,
+} from '@angular/common/http';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 //import { provideDatabase, getDatabase,AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { provideAuth, getAuth } from '@angular/fire/auth';
@@ -29,13 +33,14 @@ const firebaseConfig = {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(withInterceptors([authInterceptor])),
+    provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
 
     importProvidersFrom([
       provideFirebaseApp(() => initializeApp(firebaseConfig)),
       AngularFireDatabaseModule,
       // provideDatabase(() => getDatabase()),
       provideAuth(() => getAuth()),
-    ]), provideClientHydration(),
+    ]),
+    provideClientHydration(),
   ],
 };
