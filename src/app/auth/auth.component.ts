@@ -1,4 +1,11 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+  inject,
+} from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -9,21 +16,26 @@ import { AuthService } from './auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingComponent } from '../shared/loading/loading.component';
 import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { AlertComponent } from '../shared/alert/alert.component';
 
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [ReactiveFormsModule, LoadingComponent],
+  imports: [ReactiveFormsModule, LoadingComponent, AlertComponent],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.css',
 })
-export class AuthComponent implements OnInit {
+export class AuthComponent implements OnInit, OnDestroy {
   isLoginMode = true;
   isLoading = false;
   authForm!: FormGroup;
   authService: AuthService;
   authError: string | null = null;
+  alertSubscription!: Subscription;
+
+  @ViewChild('alertComponent', { read: ViewContainerRef })
+  alertContainer!: ViewContainerRef;
 
   constructor(private route: ActivatedRoute, private router: Router) {
     this.authService = inject(AuthService);
@@ -55,7 +67,7 @@ export class AuthComponent implements OnInit {
         this.router.navigate(['/recipes'], { relativeTo: this.route }),
       error: (error) => {
         console.log(error.code);
-        this.authError = error.code;
+        this.loadAlertComponent(error.code);
         this.isLoading = false;
       },
     });
@@ -63,5 +75,18 @@ export class AuthComponent implements OnInit {
 
   switchMode() {
     this.isLoginMode = !this.isLoginMode;
+  }
+
+  loadAlertComponent(errorMessage: string) {
+    this.alertContainer.clear();
+    const componentRef = this.alertContainer.createComponent(AlertComponent);
+    componentRef.instance.message = errorMessage;
+    this.alertSubscription = componentRef.instance.close.subscribe(() => {
+      this.alertContainer.clear();
+      this.alertSubscription.unsubscribe();
+    });
+  }
+  ngOnDestroy(): void {
+    this.alertContainer.clear();
   }
 }

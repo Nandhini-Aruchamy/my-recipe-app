@@ -14,7 +14,7 @@ export const routes: Routes = [
   {
     path: 'recipes',
     component: RecipesComponent,
-    ...canActivate(redirectUnauthorizedToLogin),
+    // ...canActivate(redirectUnauthorizedToLogin),
     children: [
       { path: '', component: RecipeStartComponent },
       { path: 'new', component: RecipeEditComponent }, // this should be before id ,otherwise id=new

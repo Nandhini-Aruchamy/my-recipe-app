@@ -1,7 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { Auth, User, user } from '@angular/fire/auth';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { Observable } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 
 @Component({

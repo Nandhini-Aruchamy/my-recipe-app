@@ -13,6 +13,7 @@ import {
   AngularFireDatabaseModule,
 } from '@angular/fire/compat/database';
 import { PROVIDED_FIRESTORE_INSTANCES } from '@angular/fire/firestore/firestore.module';
+import { provideClientHydration } from '@angular/platform-browser';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDt7p_-4Hq0oaecxVrdwkzlg9gxKnCaXNs',
@@ -35,6 +36,6 @@ export const appConfig: ApplicationConfig = {
       AngularFireDatabaseModule,
       // provideDatabase(() => getDatabase()),
       provideAuth(() => getAuth()),
-    ]),
+    ]), provideClientHydration(),
   ],
 };

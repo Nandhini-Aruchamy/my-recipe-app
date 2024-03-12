@@ -5,7 +5,7 @@ import { RecipeService } from '../recipe.service';
 import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { HttpRequestService } from '../../shared/services/http-request.service';
-import { getDatabase, ref, onValue } from '@angular/fire/database';
+//import { getDatabase, ref, onValue } from '@angular/fire/database';
 
 @Component({
   selector: 'app-recipe-list',
@@ -16,22 +16,16 @@ import { getDatabase, ref, onValue } from '@angular/fire/database';
   styleUrl: './recipe-list.component.css',
 })
 export class RecipeListComponent implements OnInit, OnDestroy {
-  recipeService: RecipeService;
+  recipeService = inject(RecipeService);
   recipeUpdatedSubscription!: Subscription;
   recipeDeletedSubscription!: Subscription;
 
   recipes?: Recipe[];
   httpService!: HttpRequestService;
-  db = getDatabase();
-
-  constructor() {
-    this.recipeService = inject(RecipeService);
-  }
 
   ngOnInit() {
     this.recipeService.getRecipes().subscribe((recipes) => {
-      console.log('fxg');
-      return (this.recipes = recipes);
+      this.recipes = recipes;
     });
     // this.recipeUpdatedSubscription = this.recipeService.recipeUpdated.subscribe(
     //   (recipes) => (this.recipes = recipes)
@@ -42,7 +36,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.recipeUpdatedSubscription.unsubscribe();
-    this.recipeDeletedSubscription.unsubscribe();
+    // this.recipeUpdatedSubscription.unsubscribe();
+    // this.recipeDeletedSubscription.unsubscribe();
   }
 }
