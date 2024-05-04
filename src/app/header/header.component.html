@@ -6,7 +6,7 @@
 
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        @if(isUserLoggedIn){
+        @if(authStore.userData() !== undefined){
         <li routerLinkActive="active">
           <a style="cursor: pointer" routerLink="/recipes">Recipes</a>
         </li>
