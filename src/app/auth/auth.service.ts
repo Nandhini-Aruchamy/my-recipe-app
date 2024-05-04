@@ -22,7 +22,9 @@ export class AuthService {
       this.fireBaseAuth,
       email,
       password
-    );
+    ).then((data) => {
+      this.authStore.storeUserDate(data);
+    });
     return from(promise);
   }
 
