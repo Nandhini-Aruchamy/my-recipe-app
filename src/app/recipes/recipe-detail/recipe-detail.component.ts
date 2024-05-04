@@ -1,10 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { Recipe } from '../recipe.model';
 import { DropdownDirective } from '../../shared/directives/dropdown.directive';
 import { ShoppingListService } from '../../shopping-list/shopping-list.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { RecipeService } from '../recipe.service';
-import { Subscription } from 'rxjs';
+import { RecipeStore } from '../../store/recipe.store';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -14,34 +13,27 @@ import { Subscription } from 'rxjs';
   styleUrl: './recipe-detail.component.css',
 })
 export class RecipeDetailComponent implements OnInit {
-  recipe!: Recipe;
-  recipeService: RecipeService;
-  shoppingListService: ShoppingListService;
-  index!: number;
-  recipeFetchedSubscription!: Subscription;
-
-  constructor(private route: ActivatedRoute, private router: Router) {
-    this.shoppingListService = inject(ShoppingListService);
-    this.recipeService = inject(RecipeService);
-  }
+  recipe!: Recipe | undefined;
+  shoppingListService = inject(ShoppingListService);
+  route = inject(ActivatedRoute);
+  router = inject(Router);
+  recipeStore = inject(RecipeStore);
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
-      this.index = +params['id'];
-      this.recipe = this.recipeService.getRecipe(this.index);
+      this.recipeStore.updateIndex(+params['id']);
+      this.recipe = this.recipeStore.detail();
     });
   }
 
   addToShoppingList() {
-    this.shoppingListService.ingredients.push(...this.recipe.ingredients);
+    if (this.recipe?.ingredients && this.recipe.ingredients.length > 0)
+      this.shoppingListService.addFromRecipe(this.recipe.ingredients);
   }
 
   deleteRecipe() {
-    this.recipeService.deleteRecipe(this.index);
+    this.recipeStore.deleteRecipe();
+    //this.store.dispatch(RecipeActions.deleteRecipes({ index: this.index }));
     this.router.navigate(['../'], { relativeTo: this.route });
   }
-
-  // onEdit() {
-  //   this.router.navigate(['../1/Edit'] ,{ relativeTo : this.route});
-  // }
 }

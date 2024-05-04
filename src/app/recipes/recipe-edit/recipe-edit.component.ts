@@ -1,14 +1,18 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Recipe } from '../recipe.model';
-import { RecipeService } from '../recipe.service';
 import {
+  AbstractControl,
   FormArray,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { RecipeStore } from '../../store/recipe.store';
+import { patchState } from '@ngrx/signals';
+import { RecipeService } from '../recipe.service';
 
 @Component({
   selector: 'app-recipe-edit',
@@ -18,24 +22,30 @@ import {
   styleUrl: './recipe-edit.component.css',
 })
 export class RecipeEditComponent implements OnInit {
-  index!: number;
-  recipe?: Recipe;
-  isEditMode!: boolean;
-  recipeService!: RecipeService;
+  recipe: Recipe | undefined = undefined;
+  isEditMode = false; //new recipe
   editRecipeForm!: FormGroup;
-
-  constructor(private route: ActivatedRoute, private router: Router) {
-    this.recipeService = inject(RecipeService);
-  }
+  route = inject(ActivatedRoute);
+  router = inject(Router);
+  recipeStore = inject(RecipeStore);
+  test!: string | undefined;
+  recipeService = inject(RecipeService);
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
-      this.index = +params['id'];
-      this.isEditMode = params['id'] != undefined;
-
+      const id = params['id'] == undefined ? undefined : +params['id'];
+      this.recipeStore.updateIndex(id);
+      this.isEditMode = id != undefined;
       this.loadRecipe();
     });
   }
+
+  // testMethod() {
+  //   this.recipeService.getRecipes().subscribe((recipes: Recipe[]) => {
+  //     if (recipes.length > 0) this.test = 'nan';
+  //     else this.test = undefined;
+  //   });
+  // }
 
   addIngredient() {
     const formArray = <FormArray>this.editRecipeForm.get('ingredients');
@@ -52,15 +62,20 @@ export class RecipeEditComponent implements OnInit {
 
   saveRecipe() {
     if (this.isEditMode) {
-      this.recipeService.updateRecipe(this.index, this.editRecipeForm.value);
+      //edit recipe
+      patchState(this.recipeStore, {
+        updatedRecipe: this.editRecipeForm.value,
+      });
+      this.recipeStore.updateRecipe();
     } else {
-      this.recipeService.addRecipe(this.editRecipeForm.value);
+      //add new recipe
+      patchState(this.recipeStore, { newRecipe: this.editRecipeForm.value });
+      this.recipeStore.addRecipe();
     }
     this.cancelEdit();
   }
 
   cancelEdit() {
-    //this.router.navigate(['/recipes/' + (this.isEditMode ?  this.index : '')])
     this.router.navigate(['../'], { relativeTo: this.route });
   }
 
@@ -74,19 +89,39 @@ export class RecipeEditComponent implements OnInit {
     let description = null;
 
     if (this.isEditMode) {
-      this.recipe = this.recipeService.getRecipe(this.index);
-      recipeName = this.recipe.name;
-      recipeImgPath = this.recipe.imagePath;
-      description = this.recipe.description;
+      this.recipe = this.recipeStore.detail();
+      if (this.recipe !== undefined) {
+        recipeName = this.recipe.name;
+        recipeImgPath = this.recipe.imagePath;
+        description = this.recipe.description;
+      }
     }
 
     this.editRecipeForm = new FormGroup({
       name: new FormControl(recipeName, Validators.required),
       imagePath: new FormControl(recipeImgPath, Validators.required),
       description: new FormControl(description, Validators.required),
-      ingredients: new FormArray([]),
+      ingredients: new FormArray([], this.emptyArrayValidator()),
     });
     if (this.isEditMode) this.loadIngredients();
+  }
+
+  emptyArrayValidator(): ValidatorFn {
+    return (control: AbstractControl) => {
+      return control.value.length === 0
+        ? { atLeastOneValueRequired: true }
+        : null;
+    };
+  }
+
+  emptyArrayValidator1() {
+    return (formArray: FormArray) => {
+      if (formArray.length === 0) {
+        return { atLeastOneValueRequired: true };
+      } else {
+        return null;
+      }
+    };
   }
 
   loadIngredients() {

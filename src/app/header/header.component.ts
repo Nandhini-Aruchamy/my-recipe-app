@@ -1,13 +1,33 @@
-import { Component} from "@angular/core";
-import { RouterModule } from "@angular/router";
+import { Component, OnInit, inject } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../auth/auth.service';
+import { RecipeStore } from '../store/recipe.store';
+import { AuthStore } from '../store/auth.store';
 
 @Component({
-    selector: "app-header",
-    standalone: true,
-    imports : [RouterModule],
-    templateUrl: "./header.component.html",
-    styleUrl: "./header.component.css"
+  selector: 'app-header',
+  standalone: true,
+  imports: [RouterModule],
+  templateUrl: './header.component.html',
+  styleUrl: './header.component.css',
 })
+export class headerComponent implements OnInit {
+  authService = inject(AuthService);
+  router = inject(Router);
+  recipeStore = inject(RecipeStore);
+  authStore = inject(AuthStore);
+  isUserLoggedIn = false;
 
-export class headerComponent {
+  ngOnInit(): void {
+    if (this.authStore.userData() !== undefined) {
+      this.isUserLoggedIn = true;
+    } else this.isUserLoggedIn = false;
+  }
+
+  onLogout() {
+    this.isUserLoggedIn = false;
+    this.authStore.clearUserDate();
+    this.recipeStore.clearRecipe();
+    this.authService.signOut().subscribe(() => this.router.navigate(['/auth']));
+  }
 }
