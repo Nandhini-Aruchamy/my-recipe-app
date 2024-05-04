@@ -1,6 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
+import { RecipeStore } from '../store/recipe.store';
+import { AuthStore } from '../store/auth.store';
 
 @Component({
   selector: 'app-header',
@@ -11,19 +13,21 @@ import { AuthService } from '../auth/auth.service';
 })
 export class headerComponent implements OnInit {
   authService = inject(AuthService);
-  route = inject(ActivatedRoute);
   router = inject(Router);
+  recipeStore = inject(RecipeStore);
+  authStore = inject(AuthStore);
   isUserLoggedIn = false;
 
   ngOnInit(): void {
-    this.authService.user.subscribe((user) => {
-      if (user) {
-        this.isUserLoggedIn = true;
-      } else this.isUserLoggedIn = false;
-    });
+    if (this.authStore.userData() !== undefined) {
+      this.isUserLoggedIn = true;
+    } else this.isUserLoggedIn = false;
   }
 
   onLogout() {
+    this.isUserLoggedIn = false;
+    this.authStore.clearUserDate();
+    this.recipeStore.clearRecipe();
     this.authService.signOut().subscribe(() => this.router.navigate(['/auth']));
   }
 }

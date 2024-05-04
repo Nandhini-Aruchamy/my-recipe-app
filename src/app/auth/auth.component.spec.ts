@@ -8,10 +8,9 @@ describe('AuthComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AuthComponent]
-    })
-    .compileComponents();
-    
+      imports: [AuthComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(AuthComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -19,5 +18,10 @@ describe('AuthComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('switchMode shpuld invert the mode', () => {
+    component.switchMode();
+    expect(component.isLoginMode).toBeFalsy();
   });
 });

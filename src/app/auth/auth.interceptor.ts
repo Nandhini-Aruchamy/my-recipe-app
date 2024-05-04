@@ -1,13 +1,11 @@
 import { HttpInterceptorFn, HttpParams } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from './auth.service';
-import { User } from '@angular/fire/auth';
 import { map, tap, take, exhaustMap, BehaviorSubject } from 'rxjs';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   let authService = inject(AuthService);
   let token = null;
-  let user = BehaviorSubject<User>;
   return next(req);
 
   // return authService.user.pipe(

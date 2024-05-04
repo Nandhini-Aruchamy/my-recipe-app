@@ -2,8 +2,6 @@ import {
   Component,
   OnDestroy,
   OnInit,
-  PLATFORM_ID,
-  PLATFORM_INITIALIZER,
   ViewChild,
   ViewContainerRef,
   inject,
@@ -17,10 +15,8 @@ import {
 import { AuthService } from './auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingComponent } from '../shared/loading/loading.component';
-import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
 import { Observable, Subscription } from 'rxjs';
 import { AlertComponent } from '../shared/alert/alert.component';
-import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-auth',
@@ -36,15 +32,11 @@ export class AuthComponent implements OnInit, OnDestroy {
   authService = inject(AuthService);
   authError: string | null = null;
   alertSubscription!: Subscription;
+  route = inject(ActivatedRoute);
+  router = inject(Router);
 
   @ViewChild('alertComponent', { read: ViewContainerRef })
   alertContainer!: ViewContainerRef;
-  platformID = inject(PLATFORM_ID);
-
-  constructor(private route: ActivatedRoute, private router: Router) {
-    console.log('platformID', this.platformID);
-    if (isPlatformBrowser(this.platformID)) localStorage.setItem('nan', '123');
-  }
 
   ngOnInit(): void {
     this.authForm = new FormGroup({

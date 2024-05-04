@@ -7,12 +7,14 @@ import {
   user,
 } from '@angular/fire/auth';
 import { Observable, from } from 'rxjs';
+import { AuthStore } from '../store/auth.store';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   fireBaseAuth = inject(Auth);
+  authStore = inject(AuthStore);
   user = user(this.fireBaseAuth);
 
   register(email: string, password: string): Observable<any> {
@@ -30,7 +32,7 @@ export class AuthService {
       email,
       password
     ).then((data) => {
-      //new User(data.user.email,data.user.uid,data.user.to)
+      this.authStore.storeUserDate(data);
     });
     return from(promise); //convert promise to subscription
   }

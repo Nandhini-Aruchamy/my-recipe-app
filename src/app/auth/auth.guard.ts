@@ -1,13 +1,12 @@
-import { CanActivateFn } from '@angular/router';
-import { AuthService } from './auth.service';
-import { inject } from '@angular/core';
-import { Observable, map, pipe, switchMap, tap } from 'rxjs';
-import { user } from '@angular/fire/auth';
-import { databaseInstanceFactory } from '@angular/fire/database/database.module';
-import { User } from './user.model';
+import { CanActivateFn, Router } from '@angular/router';
 
-export const authGuard: CanActivateFn = (route, state) => {
-  let authService = inject(AuthService);
-  //return authService.user.pipe();
+import { inject } from '@angular/core';
+import { AuthStore } from '../store/auth.store';
+
+export const AuthGuard: CanActivateFn = () => {
+  if (inject(AuthStore).userData() === undefined) {
+    inject(Router).navigate(['/auth']);
+    return false;
+  }
   return true;
 };

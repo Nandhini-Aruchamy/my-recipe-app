@@ -1,40 +1,46 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Ingredient } from '../shared/models/ingredient.model';
-import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ShoppingListService {
-  ingredientsChanged = new Subject<Ingredient[]>();
-  ingredientsToBeEdited = new Subject<[Ingredient, number]>();
-  ingredientsDeleted = new Subject<Ingredient[]>();
-  ingredients: Ingredient[] = [
+  private ingredients = signal<Ingredient[]>([
     new Ingredient('Apples', 5),
     new Ingredient('tomatoes', 15),
-  ];
+  ]);
+
+  ingredientsToBeEdited = signal<[Ingredient, number] | undefined>(undefined);
 
   constructor() {}
 
   getIngredients() {
-    return this.ingredients.slice();
+    return this.ingredients;
   }
 
   addIngredients(ingredient: Ingredient) {
-    this.ingredients.push(ingredient);
-    this.ingredientsChanged.next(this.ingredients.slice());
+    this.ingredients.update((values) => [...values, ingredient]);
   }
 
   editIngredients(ingredient: Ingredient, index: number) {
-    this.ingredientsToBeEdited.next([ingredient, index]);
+    return this.ingredientsToBeEdited.set([ingredient, index]);
   }
 
   updateIngredients(ingredient: Ingredient, index: number) {
-    this.ingredients[index] = ingredient;
+    this.ingredients.update((ingredients) => {
+      ingredients[index] = ingredient;
+      return ingredients;
+    });
   }
 
   deleteIngredients(index: number) {
-    this.ingredients.splice(index, 1);
-    this.ingredientsDeleted.next(this.ingredients.slice());
+    this.ingredients.update((ingredients) => {
+      ingredients.splice(index, 1);
+      return ingredients;
+    });
+  }
+
+  addFromRecipe(ingredients: Ingredient[]) {
+    this.ingredients.update((values) => [...values, ...ingredients]);
   }
 }

@@ -1,1 +1,6 @@
-{}
+{
+  "hosting": {
+    "public": "dist/my-recipe-app",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+  }
+}

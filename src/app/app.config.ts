@@ -1,22 +1,15 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
-
 import { routes } from './app.routes';
-import {
-  provideHttpClient,
-  withFetch,
-  withInterceptors,
-} from '@angular/common/http';
+// import {
+//   provideHttpClient,
+//   withFetch,
+//   withInterceptors,
+// } from '@angular/common/http';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
-//import { provideDatabase, getDatabase,AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { provideAuth, getAuth } from '@angular/fire/auth';
-import { authInterceptor } from './auth/auth.interceptor';
 
-import {
-  AngularFireDatabase,
-  AngularFireDatabaseModule,
-} from '@angular/fire/compat/database';
-import { PROVIDED_FIRESTORE_INSTANCES } from '@angular/fire/firestore/firestore.module';
+import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { provideClientHydration } from '@angular/platform-browser';
 
 const firebaseConfig = {
@@ -33,14 +26,13 @@ const firebaseConfig = {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
-
+    //provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
     importProvidersFrom([
       provideFirebaseApp(() => initializeApp(firebaseConfig)),
       AngularFireDatabaseModule,
-      // provideDatabase(() => getDatabase()),
       provideAuth(() => getAuth()),
     ]),
     provideClientHydration(),
+    //provideStore({ recipe: reducer }),
   ],
 };
