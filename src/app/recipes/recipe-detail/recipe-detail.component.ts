@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, effect } from '@angular/core';
 import { Recipe } from '../recipe.model';
 import { DropdownDirective } from '../../shared/directives/dropdown.directive';
 import { ShoppingListService } from '../../shopping-list/shopping-list.service';
@@ -18,6 +18,13 @@ export class RecipeDetailComponent implements OnInit {
   route = inject(ActivatedRoute);
   router = inject(Router);
   recipeStore = inject(RecipeStore);
+
+  constructor() {
+    effect(() => {
+      this.recipe = this.recipeStore.detail();
+      console.log(this.recipe);
+    });
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
