@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './recipe-start.component.html',
-  styleUrl: './recipe-start.component.css'
+  styleUrl: './recipe-start.component.scss'
 })
 export class RecipeStartComponent {
 

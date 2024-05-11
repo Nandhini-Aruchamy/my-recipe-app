@@ -9,7 +9,7 @@ import { RecipeStore } from '../../store/recipe.store';
   imports: [RecipeItemComponent, RouterModule],
   providers: [],
   templateUrl: './recipe-list.component.html',
-  styleUrl: './recipe-list.component.css',
+  styleUrl: './recipe-list.component.scss',
 })
 export class RecipeListComponent implements OnInit {
   readonly recipeStore = inject(RecipeStore);

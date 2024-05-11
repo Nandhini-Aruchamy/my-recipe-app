@@ -13,7 +13,7 @@ import {
   standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './shopping-edit.component.html',
-  styleUrl: './shopping-edit.component.css',
+  styleUrl: './shopping-edit.component.scss',
 })
 export class ShoppingEditComponent implements OnInit {
   shoppingListService = inject(ShoppingListService);

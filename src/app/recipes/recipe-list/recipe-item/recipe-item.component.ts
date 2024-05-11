@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [RouterModule],
   templateUrl: './recipe-item.component.html',
-  styleUrl: './recipe-item.component.css',
+  styleUrl: './recipe-item.component.scss',
 })
 export class RecipeItemComponent {
   @Input() recipe!: Recipe;

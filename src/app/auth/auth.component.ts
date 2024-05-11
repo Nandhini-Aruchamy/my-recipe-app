@@ -23,7 +23,7 @@ import { AlertComponent } from '../shared/alert/alert.component';
   standalone: true,
   imports: [ReactiveFormsModule, LoadingComponent, AlertComponent],
   templateUrl: './auth.component.html',
-  styleUrl: './auth.component.css',
+  styleUrl: './auth.component.scss',
 })
 export class AuthComponent implements OnInit, OnDestroy {
   isLoginMode = true;
