@@ -10,7 +10,7 @@ import { RecipeStore } from '../../store/recipe.store';
   standalone: true,
   imports: [DropdownDirective, RouterModule],
   templateUrl: './recipe-detail.component.html',
-  styleUrl: './recipe-detail.component.css',
+  styleUrl: './recipe-detail.component.scss',
 })
 export class RecipeDetailComponent implements OnInit {
   recipe!: Recipe | undefined;

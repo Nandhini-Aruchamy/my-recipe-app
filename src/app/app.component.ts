@@ -6,6 +6,6 @@ import { headerComponent } from './header/header.component';
   standalone: true,
   imports: [RouterOutlet, headerComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
+  styleUrl: './app.component.scss',
 })
 export class AppComponent {}

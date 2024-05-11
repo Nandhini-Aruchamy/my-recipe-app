@@ -19,7 +19,7 @@ import { RecipeService } from '../recipe.service';
   standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './recipe-edit.component.html',
-  styleUrl: './recipe-edit.component.css',
+  styleUrl: './recipe-edit.component.scss',
 })
 export class RecipeEditComponent implements OnInit {
   recipe: Recipe | undefined = undefined;

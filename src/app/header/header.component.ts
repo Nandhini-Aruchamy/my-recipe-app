@@ -10,7 +10,7 @@ import { getState } from '@ngrx/signals';
   standalone: true,
   imports: [RouterModule],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.css',
+  styleUrl: './header.component.scss',
 })
 export class headerComponent {
   authService = inject(AuthService);

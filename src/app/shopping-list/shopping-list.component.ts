@@ -8,7 +8,7 @@ import { ShoppingListService } from './shopping-list.service';
   standalone: true,
   imports: [ShoppingEditComponent],
   templateUrl: './shopping-list.component.html',
-  styleUrl: './shopping-list.component.css',
+  styleUrl: './shopping-list.component.scss',
 })
 export class ShoppingListComponent implements OnInit {
   ingredients = signal<Ingredient[]>([]);
