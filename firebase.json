@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/my-recipe-app",
+    "public": "dist/my-recipe-app/browser",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
   }
 }
