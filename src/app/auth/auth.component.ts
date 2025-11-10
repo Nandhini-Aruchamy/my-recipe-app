@@ -4,7 +4,6 @@ import {
   OnInit,
   ViewChild,
   ViewContainerRef,
-  afterRender,
   inject,
 } from '@angular/core';
 import {
@@ -38,13 +37,6 @@ export class AuthComponent implements OnInit, OnDestroy {
 
   @ViewChild('alertComponent', { read: ViewContainerRef })
   alertContainer!: ViewContainerRef;
-
-  constructor() {
-    console.log('window' + window.innerHeight);
-    afterRender(() => {
-      console.log(' after window' + window.innerHeight);
-    });
-  }
 
   ngOnInit(): void {
     this.authForm = new FormGroup({
