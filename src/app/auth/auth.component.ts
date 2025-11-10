@@ -40,8 +40,9 @@ export class AuthComponent implements OnInit, OnDestroy {
   alertContainer!: ViewContainerRef;
 
   constructor() {
+    console.log('window' + window.innerHeight);
     afterRender(() => {
-      console.log('window' + window.innerHeight);
+      console.log(' after window' + window.innerHeight);
     });
   }
 
