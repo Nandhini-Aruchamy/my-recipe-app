@@ -1,9 +1,16 @@
-import { Component, OnInit, inject, effect } from '@angular/core';
+import {
+  Component,
+  DoCheck,
+  AfterViewChecked,
+  inject,
+  effect,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { RecipeStore } from '../store/recipe.store';
 import { AuthStore } from '../store/auth.store';
-import { getState } from '@ngrx/signals';
+//import { getState } from '@ngrx/signals';
 
 @Component({
   selector: 'app-header',
@@ -11,8 +18,9 @@ import { getState } from '@ngrx/signals';
   imports: [RouterModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class headerComponent {
+export class headerComponent implements DoCheck, AfterViewChecked {
   authService = inject(AuthService);
   router = inject(Router);
   recipeStore = inject(RecipeStore);
@@ -34,4 +42,5 @@ export class headerComponent {
     this.recipeStore.clearRecipe();
     this.authService.signOut().subscribe(() => this.router.navigate(['/auth']));
   }
+
 }

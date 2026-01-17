@@ -6,10 +6,11 @@ import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.compon
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 import { RecipesResolver } from './recipes/recipes.resolver';
 import { AuthComponent } from './auth/auth.component';
-import { redirectUnauthorizedTo } from '@angular/fire/auth-guard';
+//import { redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { AuthGuard } from './auth/auth.guard';
+import { LoginComponent } from './login/login.component';
 
-const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['auth']);
+//const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['auth']);
 export const routes: Routes = [
   { path: '', redirectTo: '/recipes', pathMatch: 'full' },
   {
@@ -26,4 +27,5 @@ export const routes: Routes = [
   },
   { path: 'shoppingList', component: ShoppingListComponent },
   { path: 'auth', component: AuthComponent },
+  { path: 'login', component: LoginComponent },
 ];
